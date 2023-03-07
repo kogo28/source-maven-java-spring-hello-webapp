@@ -1,5 +1,5 @@
 pipeline {
-  agent { label 'jenkins-node' }
+  agent { label 'node01' }
   
   parameters {
     string defaultValue: '172.31.45.161', name: 'TOMCAT_SERVER'
