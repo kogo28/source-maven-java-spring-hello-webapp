@@ -27,7 +27,7 @@ pipeline {
 
     stage('Deploy to Tomcat') {
       steps {
-        sh "scp {env.WORKSPACE}/target/hello-world.war ${params.TOMCAT_USER}@${params.TOMCAT_SERVER}:${params.TOMCAT_ROOT}"
+        sh "scp ${env.WORKSPACE}/target/hello-world.war ${params.TOMCAT_USER}@${params.TOMCAT_SERVER}:${params.TOMCAT_ROOT}"
       }
     }
   }
