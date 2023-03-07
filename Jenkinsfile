@@ -1,6 +1,17 @@
 pipeline {
   agent { label 'jenkins-node' }
+  
+  parameters {
+    string defaultValue: '172.31.45.161', name: 'TOMCAT_SERVER'
+    string defaultValue: '/var/lib/tomcat9/webapps', name: 'TOMCAT_ROOT'
+    string defaultValue: 'ubuntu', name: 'TOMCAT_USER'
+  }
+  
+  triggers {
+    pollSCM '* * * * *'
+  }
 
+  
   stages {
     stage('Checkout') {
       steps {
@@ -9,6 +20,7 @@ pipeline {
     }
 
     stage('Maven Build') {
+      tools { maven "Maven-3" }
       steps {
         sh 'mvn clean package'
       }
@@ -16,7 +28,7 @@ pipeline {
 
     stage('Deploy to Tomcat') {
       steps {
-        sh 'scp /var/lib/jenkins/workspace/maven_pipeline/target/hello-world.war ubuntu@172.31.42.138:/var/lib/tomcat9/webapps'
+        sh "scp {env.WORKSPACE}/target/hello-world.war ${params.TOMCAT_USER}@${params.TOMCAT_SERVER}:${params.TOMCAT_ROOT}"
       }
     }
   }
